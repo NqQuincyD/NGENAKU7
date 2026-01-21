@@ -5,3 +5,5 @@ Flask-Login
 Flask-WTF
 email_validator
 python-dotenv
+gunicorn
+psycopg2-binary
