@@ -75,7 +75,15 @@ def index():
 @bp.route('/dashboard')
 @login_required
 def dashboard():
-    # Role-based dashboard logic
+    # Defensive check for missing role
+    if not current_user.role:
+        flash('Your account has no role assigned. Please contact an administrator.', 'warning')
+        return render_template('main/dashboard.html', member=None, 
+                             member_count=0, event_count=0, monthly_tithe=0, 
+                             total_offerings=0, recent_contributions=[], 
+                             trends_labels=[], trends_values=[], 
+                             dist_labels=[], dist_values=[])
+
     if current_user.role.name == 'Member':
         # 1. Find linked Member record by email
         member = current_user.member

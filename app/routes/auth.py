@@ -28,6 +28,10 @@ def register():
         from app.models.core import Role, Member
         member_role = Role.query.filter_by(name='Member').first()
         
+        if not member_role:
+            flash('Registration failed: System roles not initialized. Please contact admin.', 'danger')
+            return redirect(url_for('auth.register'))
+        
         user = User(username=username, email=email, role=member_role)
         user.set_password(password)
         db.session.add(user)
