@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 text-center py-5">
+        <div class="card shadow-sm p-5">
+            <h1 class="display-4 text-muted"><i class="bi bi-cone-striped"></i></h1>
+            <h3>{{ title }}</h3>
+            <p class="lead">This module is correctly linked but currently under development.</p>
+            <a href="{{ url_for('main.dashboard') }}" class="btn btn-primary mt-3">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Audit & Compliance</h2>
+    <a href="{{ url_for('stewardship.add_audit') }}" class="btn btn-primary"><i class="bi bi-plus-circle"></i> New
+        Audit</a>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body p-0">
+        <table class="table table-striped mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Year / Qtr</th>
+                    <th>Date</th>
+                    <th>Auditor</th>
+                    <th>Status</th>
+                    <th>Findings Summary</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for audit in audits %}
+                <tr>
+                    <td>{{ audit.year }} Q{{ audit.quarter }}</td>
+                    <td>{{ audit.date.strftime('%Y-%m-%d') }}</td>
+                    <td>{{ audit.auditor }}</td>
+                    <td>
+                        {% if audit.status == 'Compliant' %}
+                        <span class="badge bg-success">{{ audit.status }}</span>
+                        {% elif audit.status == 'Non-Compliant' %}
+                        <span class="badge bg-danger">{{ audit.status }}</span>
+                        {% elif audit.status == 'Completed' %}
+                        <span class="badge bg-info">{{ audit.status }}</span>
+                        {% else %}
+                        <span class="badge bg-secondary">{{ audit.status }}</span>
+                        {% endif %}
+                    </td>
+                    <td>{{ audit.findings[:50] }}...</td>
+                    <td>
+                        <a href="{{ url_for('stewardship.view_audit', id=audit.id) }}"
+                            class="btn btn-sm btn-outline-primary">View</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="6" class="text-center">No audit records found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

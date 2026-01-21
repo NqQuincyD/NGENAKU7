@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- STATS -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="card shadow-sm p-3">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h6>Total Members</h6>
+                    <h4>{{ member_count }}</h4>
+                </div>
+                <div class="stat-icon text-primary">
+                    <i class="bi bi-people"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm p-3">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h6>Monthly Tithe</h6>
+                    <h4>R {{ "%.2f"|format(monthly_tithe) }}</h4>
+                </div>
+                <div class="stat-icon text-success">
+                    <i class="bi bi-cash-stack"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm p-3">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h6>Offerings</h6>
+                    <h4>R {{ "%.2f"|format(total_offerings) }}</h4>
+                </div>
+                <div class="stat-icon text-warning">
+                    <i class="bi bi-gift"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-3">
+        <div class="card shadow-sm p-3">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h6>Stewardship Events</h6>
+                    <h4>{{ event_count }} Upcoming</h4>
+                </div>
+                <div class="stat-icon text-danger">
+                    <i class="bi bi-calendar-event"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- CHARTS SECTION -->
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="card shadow-sm p-3 h-100">
+            <h6 class="card-title">Giving Trends (Last 6 Months)</h6>
+            <div class="card-body">
+                <canvas id="trendsChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3 h-100">
+            <h6 class="card-title">Offering Distribution</h6>
+            <div class="card-body d-flex align-items-center justify-content-center">
+                <canvas id="distChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- RECENT CONTRIBUTIONS -->
+<div class="card shadow-sm">
+    <div class="card-header">
+        Recent Contributions
+    </div>
+    <div class="card-body p-0">
+        <table class="table table-striped mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Date</th>
+                    <th>Member</th>
+                    <th>Type</th>
+                    <th>Amount</th>
+                    <th>Method</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for c in recent_contributions %}
+                <tr>
+                    <td>{{ c.date.strftime('%d %b %Y') }}</td>
+                    <td>{{ c.member.first_name ~ ' ' ~ c.member.last_name if c.member else 'Anonymous' }}</td>
+                    <td>{{ c.type }}</td>
+                    <td>R {{ "%.2f"|format(c.amount) }}</td>
+                    <td>{{ c.method }}</td>
+                </tr>
+                {% else %}
+                <tr>
+                    <td colspan="5" class="text-center">No recent contributions</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Trends Chart
+    const trendsCtx = document.getElementById('trendsChart').getContext('2d');
+    new Chart(trendsCtx, {
+        type: 'line',
+        data: {
+            labels: {{ trends_labels | tojson }},
+        datasets: [{
+            label: 'Total Giving (R)',
+            data: {{ trends_values | tojson }},
+        borderColor: '#0d6efd',
+        backgroundColor: 'rgba(13, 110, 253, 0.1)',
+        tension: 0.3,
+        fill: true
+            }]
+        },
+        options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false }
+        },
+        scales: {
+            y: { beginAtZero: true }
+        }
+    }
+    });
+
+    // Distribution Chart
+    const distCtx = document.getElementById('distChart').getContext('2d');
+    new Chart(distCtx, {
+        type: 'doughnut',
+        data: {
+            labels: {{ dist_labels | tojson }},
+        datasets: [{
+            data: {{ dist_values | tojson }},
+        backgroundColor: [
+            '#ffc107', '#198754', '#0dcaf0', '#fd7e14', '#6610f2', '#d63384'
+        ]
+            }]
+        },
+        options: {
+        responsive: true,
+        plugins: {
+            legend: { position: 'bottom' }
+        }
+    }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-12">
+        <h2>Welcome, {{ current_user.username }}</h2>
+        <p class="text-muted">Here is an overview of your personal stewardship.</p>
+    </div>
+</div>
+
+<!-- PERSONAL STATS -->
+<div class="row g-4 mb-4">
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3 border-0 border-start border-4 border-primary">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h6 class="text-muted text-uppercase small fw-bold">My Monthly Tithe</h6>
+                    <h3>R {{ "%.2f"|format(my_monthly_tithe) }}</h3>
+                </div>
+                <div class="stat-icon text-primary bg-primary-subtle rounded p-2">
+                    <i class="bi bi-cash-stack"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3 border-0 border-start border-4 border-success">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h6 class="text-muted text-uppercase small fw-bold">My Total Offerings</h6>
+                    <h3>R {{ "%.2f"|format(my_total_offerings) }}</h3>
+                </div>
+                <div class="stat-icon text-success bg-success-subtle rounded p-2">
+                    <i class="bi bi-gift"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card shadow-sm p-3 border-0 border-start border-4 border-info">
+            <div class="d-flex justify-content-between">
+                <div>
+                    <h6 class="text-muted text-uppercase small fw-bold">Upcoming Events</h6>
+                    <h3>{{ event_count }}</h3>
+                </div>
+                <div class="stat-icon text-info bg-info-subtle rounded p-2">
+                    <i class="bi bi-calendar-event"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- MY RECENT CONTRIBUTIONS -->
+    <div class="col-md-8 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white py-3">
+                <h6 class="m-0 fw-bold text-primary">My Recent Contributions</h6>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Amount</th>
+                            <th>Method</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for c in my_recent_contributions %}
+                        <tr>
+                            <td>{{ c.date.strftime('%d %b %Y') }}</td>
+                            <td>{{ c.type }}</td>
+                            <td class="fw-bold">R {{ "%.2f"|format(c.amount) }}</td>
+                            <td><span class="badge bg-secondary">{{ c.method }}</span></td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center py-4 text-muted">
+                                <i class="bi bi-receipt d-block display-4 mb-2"></i>
+                                No contributions found yet.
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- QUICK LINKS / UPCOMING EVENTS LIST -->
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm h-100">
+            <div class="card-header bg-white py-3">
+                <h6 class="m-0 fw-bold text-info">Upcoming Events</h6>
+            </div>
+            <div class="card-body p-0">
+                <ul class="list-group list-group-flush">
+                    {% for event in upcoming_events %}
+                    <li class="list-group-item p-3">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h6 class="mb-1">{{ event.title }}</h6>
+                            <small class="text-muted">{{ event.date.strftime('%d %b') }}</small>
+                        </div>
+                        <p class="mb-1 small text-muted">{{ event.description[:60] }}...</p>
+                    </li>
+                    {% else %}
+                    <li class="list-group-item p-4 text-center text-muted">
+                        No upcoming events.
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

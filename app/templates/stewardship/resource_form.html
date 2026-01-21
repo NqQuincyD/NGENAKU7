@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h4>{{ title }}</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" enctype="multipart/form-data">
+                    <div class="mb-3">
+                        <label class="form-label">Title</label>
+                        <input type="text" name="title" class="form-control" required
+                            placeholder="e.g. Stewardship 101 Guide">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Type</label>
+                        <select name="type" class="form-select">
+                            <option value="Document">Document (PDF/Doc)</option>
+                            <option value="Video">Video / File</option>
+                            <option value="Sermon">Sermon Notes</option>
+                            <option value="Article">Article</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3" id="url-field">
+                        <label class="form-label">URL / Link</label>
+                        <input type="url" name="url" class="form-control" placeholder="https://...">
+                    </div>
+
+                    <div class="mb-3 d-none" id="file-field">
+                        <label class="form-label">Upload File</label>
+                        <input type="file" name="file" class="form-control">
+                    </div>
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{{ url_for('stewardship.education') }}" class="btn btn-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary">Save Resource</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const typeSelect = document.querySelector('select[name="type"]');
+        const urlField = document.getElementById('url-field');
+        const fileField = document.getElementById('file-field');
+        const urlInput = urlField.querySelector('input');
+        const fileInput = fileField.querySelector('input');
+
+        function toggleFields() {
+            const type = typeSelect.value;
+            // Allow uploads for Document, Video, and Sermon
+            if (type === 'Document' || type === 'Video' || type === 'Sermon') {
+                urlField.classList.add('d-none');
+                fileField.classList.remove('d-none');
+                fileInput.setAttribute('required', 'required');
+                urlInput.removeAttribute('required');
+            } else {
+                urlField.classList.remove('d-none');
+                fileField.classList.add('d-none');
+                urlInput.setAttribute('required', 'required');
+                fileInput.removeAttribute('required');
+            }
+        }
+
+        typeSelect.addEventListener('change', toggleFields);
+        toggleFields(); // Initial check
+    });
+</script>
+{% endblock %}

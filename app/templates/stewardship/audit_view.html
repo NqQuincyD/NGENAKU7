@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4 class="mb-0">Audit Record Details</h4>
+                <a href="{{ url_for('stewardship.audit') }}" class="btn btn-sm btn-secondary"><i
+                        class="bi bi-arrow-left"></i> Back to List</a>
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h6 class="text-muted">Period</h6>
+                        <h5>{{ audit.year }} Q{{ audit.quarter }}</h5>
+                    </div>
+                    <div class="col-md-6 text-md-end">
+                        <h6 class="text-muted">Audit Date</h6>
+                        <h5>{{ audit.date.strftime('%d %B %Y') }}</h5>
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h6 class="text-muted">Auditor</h6>
+                    <p class="fs-5">{{ audit.auditor }}</p>
+                </div>
+
+                <div class="mb-4">
+                    <h6 class="text-muted">Status</h6>
+                    {% if audit.status == 'Compliant' %}
+                    <span class="badge bg-success fs-6">{{ audit.status }}</span>
+                    {% elif audit.status == 'Non-Compliant' %}
+                    <span class="badge bg-danger fs-6">{{ audit.status }}</span>
+                    {% elif audit.status == 'Completed' %}
+                    <span class="badge bg-info fs-6">{{ audit.status }}</span>
+                    {% else %}
+                    <span class="badge bg-secondary fs-6">{{ audit.status }}</span>
+                    {% endif %}
+                </div>
+
+                <div class="mb-4">
+                    <h6 class="text-muted">Findings</h6>
+                    <div class="p-3 bg-light rounded">
+                        {{ audit.findings }}
+                    </div>
+                </div>
+
+                <div class="mb-4">
+                    <h6 class="text-muted">Recommendations</h6>
+                    <div class="p-3 bg-light rounded">
+                        {{ audit.recommendations or 'No recommendations recorded.' }}
+                    </div>
+                </div>
+
+                <div class="text-muted small">
+                    Record ID: #{{ audit.id }} | Created: {{ audit.created_at.strftime('%Y-%m-%d %H:%M') }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

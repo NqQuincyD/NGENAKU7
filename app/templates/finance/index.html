@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Tithes & Offerings</h2>
+    <div>
+        <a href="{{ url_for('finance.add_tithe') }}" class="btn btn-primary"><i class="bi bi-plus-circle"></i> Record
+            Tithe</a>
+        <a href="{{ url_for('finance.add_offering') }}" class="btn btn-warning"><i class="bi bi-plus-circle"></i> Record
+            Offering</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">Recent Tithes</h5>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Member</th>
+                            <th>Amount</th>
+                            <th>Method</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in tithes %}
+                        <tr>
+                            <td>{{ t.date.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ t.member.first_name ~ ' ' ~ t.member.last_name if t.member else 'Anonymous' }}</td>
+                            <td>R {{ "%.2f"|format(t.amount) }}</td>
+                            <td>{{ t.method }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center">No records found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-light">
+                <h5 class="mb-0">Recent Offerings</h5>
+            </div>
+            <div class="card-body p-0">
+                <table class="table table-sm mb-0">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Category</th>
+                            <th>Amount</th>
+                            <th>Member</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for o in offerings %}
+                        <tr>
+                            <td>{{ o.date.strftime('%Y-%m-%d') }}</td>
+                            <td>{{ o.category }}</td>
+                            <td>R {{ "%.2f"|format(o.amount) }}</td>
+                            <td>{{ o.member.first_name ~ ' ' ~ o.member.last_name if o.member else 'Anonymous' }}</td>
+                        </tr>
+                        {% else %}
+                        <tr>
+                            <td colspan="4" class="text-center">No records found.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

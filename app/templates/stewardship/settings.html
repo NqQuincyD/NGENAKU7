@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-header">
+                <h4>System Settings</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <div class="mb-3">
+                        <label class="form-label">Church Name</label>
+                        <input type="text" name="church_name" class="form-control" value="{{ setting.church_name }}"
+                            required>
+                        <div class="form-text">The name of your local church congregation.</div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label">Conference Name</label>
+                        <input type="text" name="conference_name" class="form-control"
+                            value="{{ setting.conference_name }}">
+                        <div class="form-text">The name of the conference this church belongs to.</div>
+                    </div>
+
+                    <div class="col-md-4 mb-3">
+                        <label class="form-label">Currency Symbol</label>
+                        <input type="text" name="currency_symbol" class="form-control"
+                            value="{{ setting.currency_symbol }}" required>
+                        <div class="form-text">e.g. $, R, €</div>
+                    </div>
+
+                    <div class="alert alert-info">
+                        <i class="bi bi-info-circle"></i> These settings affect reports and dashboard displays globally.
+                    </div>
+
+                    <div class="d-flex justify-content-end">
+                        <button type="submit" class="btn btn-primary">Save Settings</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

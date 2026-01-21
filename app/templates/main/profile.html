@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-12 mb-4">
+        <h2>My Profile</h2>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Edit Details</h5>
+            </div>
+            <div class="card-body">
+                <form method="POST">
+                    <h6 class="mb-3 text-muted">Personal Information</h6>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="first_name" class="form-label">First Name</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name"
+                                value="{{ member.first_name if member and member.first_name else '' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="last_name" class="form-label">Last Name</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name"
+                                value="{{ member.last_name if member and member.last_name else '' }}">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="phone" class="form-label">Phone Number</label>
+                        <input type="tel" class="form-control" id="phone" name="phone"
+                            value="{{ member.phone if member and member.phone else '' }}">
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="dob" class="form-label">Date of Birth</label>
+                            <input type="date" class="form-control" id="dob" name="dob"
+                                value="{{ member.dob if member and member.dob else '' }}">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="baptism_date" class="form-label">Baptism Date</label>
+                            <input type="date" class="form-control" id="baptism_date" name="baptism_date"
+                                value="{{ member.baptism_date if member and member.baptism_date else '' }}">
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+                    <h6 class="mb-3 text-muted">Login Details</h6>
+
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username"
+                            value="{{ current_user.username }}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email Address</label>
+                        <input type="email" class="form-control" id="email" name="email"
+                            value="{{ current_user.email }}" required>
+                    </div>
+
+                    <hr class="my-4">
+                    <h6 class="mb-3 text-muted">Change Password (Optional)</h6>
+
+                    <div class="mb-3">
+                        <label for="password" class="form-label">New Password</label>
+                        <input type="password" class="form-control" id="password" name="password"
+                            placeholder="Leave blank to keep current password">
+                    </div>
+
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary">Update Profile</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0">Role Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Current Role:</strong> <span class="badge bg-info text-dark">{{ current_user.role.name
+                        }}</span></p>
+                <p class="text-muted small">
+                    Permissions associated with this role include access to
+                    {% if current_user.role.name == 'Admin' %}
+                    all system modules, settings, and user management.
+                    {% else %}
+                    dashboard, stewardship resources, and personal contribution records.
+                    {% endif %}
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
