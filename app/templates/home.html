@@ -2,7 +2,234 @@
 
 {% block title %}Welcome - NGENAKU7{% endblock %}
 
+{% block navbar %}{% endblock %}
+
 {% block content %}
+<style>
+    .main-content {
+        padding-top: 0 !important;
+    }
+</style>
+<!-- Intro Animation Overlay -->
+<div id="intro-overlay"
+    style="position: fixed; top: 0; left: 0; width: 100%; height: 100vh; background: radial-gradient(circle at center, #1b3a6b 0%, #050814 100%); z-index: 9999; overflow: hidden; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;">
+
+    <!-- Floating Particles (Fireflies) -->
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+    <div class="firefly"></div>
+
+    <!-- 3D Stage -->
+    <div class="stage"
+        style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); width: 100%; height: 600px; perspective: 1200px; display: flex; align-items: center; justify-content: center;">
+
+        <!-- Floor Reflection -->
+        <div
+            style="position: absolute; bottom: 50px; left: 0; width: 100%; height: 50%; background: linear-gradient(to bottom, rgba(31, 60, 136, 0.2), transparent); transform: rotateX(70deg); transform-origin: top; opacity: 0.3;">
+        </div>
+
+        <!-- Door Container (Centered) -->
+        <div class="door-container"
+            style="position: absolute; left: 50%; bottom: 100px; width: 140px; height: 240px; transform: translateX(-50%) rotateY(0deg); transform-style: preserve-3d; transition: transform 1s ease;">
+            <!-- Door Frame -->
+            <div
+                style="position: absolute; top: -8px; left: -8px; width: 156px; height: 254px; border: 10px solid #FFD700; border-bottom: none; box-shadow: 0 0 60px rgba(10, 20, 50, 0.8);">
+                <!-- Light inside -->
+                <div id="door-light"
+                    style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: #fff; box-shadow: 0 0 100px 40px rgba(255, 255, 255, 1); opacity: 0; transition: opacity 1s ease-in;">
+                </div>
+            </div>
+
+            <!-- The Door -->
+            <div id="side-door"
+                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: url('{{ url_for('static', filename='img/blue_door_texture.png') }}'); background-size: cover; background-position: center; transform-origin: left; transition: transform 2s ease-in-out;">
+            </div>
+        </div>
+
+        <!-- Spotlight Effect (Centered) -->
+        <div id="spotlight-beam"
+            style="position: absolute; top: -50px; left: 50%; transform: translateX(-50%) rotate(0deg); width: 600px; height: 800px; background: radial-gradient(ellipse at top, rgba(255,255,255,0.1), transparent 70%); opacity: 0; transition: opacity 1.5s; pointer-events: none;">
+        </div>
+
+    </div>
+
+    <!-- Start Button -->
+    <button id="intro-btn" class="btn btn-outline-light px-5 py-3"
+        style="position: absolute; bottom: 80px; left: 50%; transform: translateX(-50%); letter-spacing: 3px; border-radius: 50px; font-weight: 300; transition: all 0.5s; z-index: 1000; background: rgba(0,0,0,0.3); backdrop-filter: blur(5px); border-color: rgba(255,255,255,0.3);">
+        NGENAKU7
+    </button>
+</div>
+
+<style>
+    /* Particle Animation */
+    .firefly {
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        width: 0.4vw;
+        height: 0.4vw;
+        margin: -0.2vw 0 0 -9.8vw;
+        animation: drift 20s ease alternate infinite;
+        pointer-events: none;
+        z-index: 9998;
+        background: radial-gradient(white, transparent 70%);
+        opacity: 0;
+        border-radius: 50%;
+    }
+
+    /* Specific delays and positions for random feel */
+    .firefly:nth-child(1) {
+        animation-duration: 14s;
+        top: 20%;
+        left: 20%;
+        opacity: 0.5;
+    }
+
+    .firefly:nth-child(2) {
+        animation-duration: 18s;
+        top: 80%;
+        left: 80%;
+        opacity: 0.3;
+    }
+
+    .firefly:nth-child(3) {
+        animation-duration: 22s;
+        top: 40%;
+        left: 60%;
+        opacity: 0.6;
+    }
+
+    .firefly:nth-child(4) {
+        animation-duration: 16s;
+        top: 70%;
+        left: 30%;
+        opacity: 0.4;
+    }
+
+    .firefly:nth-child(5) {
+        animation-duration: 20s;
+        top: 30%;
+        left: 70%;
+        opacity: 0.5;
+    }
+
+    .firefly:nth-child(6) {
+        animation-duration: 25s;
+        top: 90%;
+        left: 10%;
+        opacity: 0.3;
+    }
+
+    .firefly:nth-child(7) {
+        animation-duration: 15s;
+        top: 10%;
+        left: 90%;
+        opacity: 0.4;
+    }
+
+    .firefly:nth-child(8) {
+        animation-duration: 19s;
+        top: 50%;
+        left: 50%;
+        opacity: 0.2;
+    }
+
+    .firefly:nth-child(9) {
+        animation-duration: 21s;
+        top: 25%;
+        left: 75%;
+        opacity: 0.5;
+    }
+
+    .firefly:nth-child(10) {
+        animation-duration: 23s;
+        top: 75%;
+        left: 25%;
+        opacity: 0.3;
+    }
+
+    @keyframes drift {
+        0% {
+            transform: translate(0, 0);
+            opacity: 0.2;
+        }
+
+        50% {
+            opacity: 0.6;
+        }
+
+        100% {
+            transform: translate(50px, -50px);
+            opacity: 0.2;
+        }
+    }
+</style>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const btn = document.getElementById('intro-btn');
+        const overlay = document.getElementById('intro-overlay');
+        const door = document.getElementById('side-door');
+        const doorLight = document.getElementById('door-light');
+        const beam = document.getElementById('spotlight-beam');
+        const stage = document.querySelector('.stage');
+
+        // Ensure overlay is visible on load (fix for history back navigation)
+        overlay.style.display = 'flex';
+        overlay.style.opacity = '1';
+
+        btn.addEventListener('click', function () {
+            // 1. Begin
+            btn.style.opacity = '0';
+            btn.style.pointerEvents = 'none';
+
+            // 2. Lights ON
+            beam.style.opacity = '1';
+
+            // 3. Open Door (Fast response)
+            setTimeout(() => {
+                door.style.transform = 'rotateY(-105deg)';
+                doorLight.style.opacity = '1';
+
+                // Slight Zoom IN to the door
+                stage.style.transition = 'transform 3s ease-in';
+                stage.style.transform = 'translate(-50%, -50%) scale(1.2)';
+            }, 800);
+
+            // 4. Enter (Massive Zoom through door)
+            setTimeout(() => {
+                stage.style.transform = 'translate(-50%, -50%) scale(8)';
+                stage.style.opacity = '0';
+
+                overlay.style.transition = 'background 0.1s ease'; // Fast transition
+                overlay.style.background = 'white'; // Override gradient image with solid white
+            }, 2500);
+
+            // 5. Reveal
+            setTimeout(() => {
+                overlay.style.transition = 'opacity 1.5s ease';
+                overlay.style.opacity = '0';
+
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 1500);
+            }, 3000);
+        });
+    });
+</script>
+
 <div class="bg-light text-dark py-5 text-center position-relative overflow-hidden"
     style="min-height: 500px; display: flex; align-items: center; justify-content: center;">
     <!-- Background Image Layer -->
